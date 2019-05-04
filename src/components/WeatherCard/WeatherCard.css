@@ -1,0 +1,8 @@
+.weather-card {
+  border: 1px salmon solid;
+  border-radius: 0.5em;
+  padding: 1em;
+  box-shadow: 5px 5px 5px olive;
+  min-width: 10vw;
+  margin: 0.5vmin;
+}

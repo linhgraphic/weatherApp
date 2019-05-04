@@ -4,6 +4,7 @@ import Input from "./components/input";
 import { API_KEY } from "./constants";
 import Form from "./components/form";
 import CurrentWeather from "./components/CurrentWeather";
+import ForecastWeather from "./components/ForecastWeather";
 
 class App extends Component {
   state = {
@@ -13,7 +14,7 @@ class App extends Component {
     city: "",
     currentWeather: true,
     forecastWeather: true,
-    units: "metric"
+    units: "metrics"
   };
   onChange = event => {
     this.setState({
@@ -56,7 +57,7 @@ class App extends Component {
       fetch(
         `http://api.openweathermap.org/data/2.5/forecast?q=${
           this.state.city
-        }&appid=${API_KEY}`
+        }&appid=${API_KEY}&units=${this.state.units}`
       )
         .then(res => {
           if (!res.ok) {
@@ -139,7 +140,7 @@ class App extends Component {
             <CurrentWeather data={this.state.weatherData} />
           )}
           {this.state.forecastData && (
-            <CurrentWeather data={this.state.weatherData} />
+            <ForecastWeather data={this.state.forecastData} />
           )}
           {this.state.error && (
             <p>
