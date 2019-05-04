@@ -3,41 +3,75 @@ import "./App.css";
 import Input from "./components/input";
 import { API_KEY } from "./constants";
 import Form from "./components/form";
-import Weather from "./components/Weather";
+import CurrentWeather from "./components/CurrentWeather";
 
 class App extends Component {
   state = {
     loading: false,
     error: null,
     weatherData: null,
-    city: ""
+    city: "",
+    currentWeather: true,
+    forecastWeather: true,
+    units: "metric"
   };
   onChange = event => {
-    this.setState({ [event.target.id]: event.target.value });
+    this.setState({
+      [event.target.name || event.target.id]: event.target.value,
+      error: null
+    });
+  };
+  onChangeCheckbox = event => {
+    this.setState({
+      [event.target.name || event.target.id]: !this.state[
+        event.target.name || event.target.id
+      ]
+    });
   };
   onSubmit = event => {
     event.preventDefault();
     this.setState({ loading: true });
-    setTimeout(() => {
+    if (this.state.currentWeather)
       fetch(
         `http://api.openweathermap.org/data/2.5/weather?q=${
           this.state.city
-        }&appid=${API_KEY}`
+        }&appid=${API_KEY}&units=${this.state.units}`
       )
         .then(res => {
-          console.log("res", res);
           if (!res.ok) {
-            return res
-              .json()
-              .then(json => this.setState({ error: json, loading: false }));
+            console.log("res", res);
+            res.json().then(json => {
+              throw json;
+            });
           }
           return res.json();
         })
         .then(json => {
           console.log("json", json);
           this.setState({ weatherData: json, loading: false });
-        });
-    }, 500);
+        })
+        .catch(error => this.setState({ error, loading: false }));
+
+    if (this.state.forecastWeather)
+      fetch(
+        `http://api.openweathermap.org/data/2.5/forecast?q=${
+          this.state.city
+        }&appid=${API_KEY}`
+      )
+        .then(res => {
+          if (!res.ok) {
+            console.log("res", res);
+            res.json().then(json => {
+              throw json;
+            });
+          }
+          return res.json();
+        })
+        .then(json => {
+          console.log("json", json);
+          this.setState({ forecastData: json, loading: false });
+        })
+        .catch(error => this.setState({ error, loading: false }));
   };
 
   render() {
@@ -51,13 +85,62 @@ class App extends Component {
               placeholder="Enter city"
               onChange={this.onChange}
             />
+            <br />
             <Input
-              disabled={this.state.loading}
+              label="Current Weather"
+              id="currentWeather"
+              type="checkbox"
+              onChange={this.onChangeCheckbox}
+              checked={this.state.currentWeather}
+            />
+            <br />
+
+            <Input
+              label="Forecast Weather"
+              id="forecastWeather"
+              type="checkbox"
+              onChange={this.onChangeCheckbox}
+              checked={this.state.forecastWeather}
+            />
+            <br />
+            <Input
+              label="Imperial units"
+              checked={"imperial" === this.state.units}
+              id="ImperialUnits"
+              type="radio"
+              name="units"
+              value="imperial"
+              onChange={this.onChange}
+            />
+
+            <br />
+            <Input
+              label="Metric units"
+              checked={"metric" === this.state.units}
+              id="MetricUnit"
+              type="radio"
+              name="units"
+              value="metric"
+              onChange={this.onChange}
+            />
+
+            <br />
+            <Input
+              disabled={
+                !(this.state.currentWeather || this.state.forecastWeather) ||
+                this.state.loading ||
+                !this.state.city
+              }
               type="submit"
               value={this.state.loading ? "Loading..." : "Submit"}
             />
           </Form>
-          {this.state.weatherData && <Weather data={this.state.weatherData} />}
+          {this.state.weatherData && (
+            <CurrentWeather data={this.state.weatherData} />
+          )}
+          {this.state.forecastData && (
+            <CurrentWeather data={this.state.weatherData} />
+          )}
           {this.state.error && (
             <p>
               SOMETHING SOMEWHERE WENT TERRIBLY WRONG.
