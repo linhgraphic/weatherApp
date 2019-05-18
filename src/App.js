@@ -49,7 +49,12 @@ class App extends Component {
         })
         .then(json => {
           console.log("json", json);
-          this.setState({ weatherData: json, loading: false });
+          this.setState({
+            weatherData: json,
+            loading: false,
+            currentUnits: this.state.units,
+            currentCity: this.state.currentCity
+          });
         })
         .catch(error => this.setState({ error, loading: false }));
 
@@ -70,7 +75,12 @@ class App extends Component {
         })
         .then(json => {
           console.log("json", json);
-          this.setState({ forecastData: json, loading: false });
+          this.setState({
+            forecastData: json,
+            loading: false,
+            currentUnits: this.state.units,
+            currentCity: this.state.currentCity
+          });
         })
         .catch(error => this.setState({ error, loading: false }));
   };
@@ -140,7 +150,8 @@ class App extends Component {
           {this.state.weatherData && (
             <CurrentWeather
               data={this.state.weatherData}
-              units={this.state.units}
+              units={this.state.currentUnits}
+              city={this.state.currentCity}
             />
           )}
           {this.state.forecastData && (
