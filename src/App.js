@@ -14,7 +14,7 @@ class App extends Component {
     city: "",
     currentWeather: true,
     forecastWeather: true,
-    units: "metrics"
+    units: "metric"
   };
   onChange = event => {
     this.setState({
@@ -81,6 +81,7 @@ class App extends Component {
         <header className="App-header">
           <Form onSubmit={this.onSubmit}>
             <Input
+              label="City: "
               value={this.state.city}
               id="city"
               placeholder="Enter city"
@@ -137,7 +138,10 @@ class App extends Component {
             />
           </Form>
           {this.state.weatherData && (
-            <CurrentWeather data={this.state.weatherData} />
+            <CurrentWeather
+              data={this.state.weatherData}
+              units={this.state.units}
+            />
           )}
           {this.state.forecastData && (
             <ForecastWeather data={this.state.forecastData} />

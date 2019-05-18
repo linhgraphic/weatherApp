@@ -4,7 +4,7 @@ import "./WeatherCard.css";
 const WeatherCard = props => {
   return (
     <div className="weather-card">
-      <p>{props.weather.main.pressure}</p>
+      <p>{props.weather.main.humidity}</p>
     </div>
   );
 };
