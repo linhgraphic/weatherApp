@@ -5,6 +5,7 @@ import { API_KEY } from "./constants";
 import Form from "./components/form";
 import CurrentWeather from "./components/CurrentWeather";
 import ForecastWeather from "./components/ForecastWeather";
+import Loader from "./components/Loader";
 
 class App extends Component {
   state = {
@@ -31,16 +32,18 @@ class App extends Component {
   };
   onSubmit = event => {
     event.preventDefault();
-    this.setState({ loading: true });
+    this.setState({ loading: true, forecastData: null, weatherData: null });
     if (this.state.currentWeather)
       fetch(
-        `http://api.openweathermap.org/data/2.5/weather?q=${
+        //to use the same protocol of where the app is run. in this case http to https
+        `${
+          window.location.protocol
+        }//api.openweathermap.org/data/2.5/weather?q=${
           this.state.city
         }&appid=${API_KEY}&units=${this.state.units}`
       )
         .then(res => {
           if (!res.ok) {
-            console.log("res", res);
             res.json().then(json => {
               throw json;
             });
@@ -48,25 +51,25 @@ class App extends Component {
           return res.json();
         })
         .then(json => {
-          console.log("json", json);
           this.setState({
             weatherData: json,
             loading: false,
             currentUnits: this.state.units,
-            currentCity: this.state.currentCity
+            currentCity: this.state.city
           });
         })
         .catch(error => this.setState({ error, loading: false }));
 
     if (this.state.forecastWeather)
       fetch(
-        `http://api.openweathermap.org/data/2.5/forecast?q=${
+        `${
+          window.location.protocol
+        }//api.openweathermap.org/data/2.5/forecast?q=${
           this.state.city
         }&appid=${API_KEY}&units=${this.state.units}`
       )
         .then(res => {
           if (!res.ok) {
-            console.log("res", res);
             res.json().then(json => {
               throw json;
             });
@@ -74,12 +77,11 @@ class App extends Component {
           return res.json();
         })
         .then(json => {
-          console.log("json", json);
           this.setState({
             forecastData: json,
             loading: false,
             currentUnits: this.state.units,
-            currentCity: this.state.currentCity
+            currentCity: this.state.city
           });
         })
         .catch(error => this.setState({ error, loading: false }));
@@ -88,6 +90,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Loader open={this.state.loading} />
         <header className="App-header">
           <Form onSubmit={this.onSubmit}>
             <Input
@@ -155,7 +158,10 @@ class App extends Component {
             />
           )}
           {this.state.forecastData && (
-            <ForecastWeather data={this.state.forecastData} />
+            <ForecastWeather
+              data={this.state.forecastData}
+              city={this.state.currentCity}
+            />
           )}
           {this.state.error && (
             <p>
