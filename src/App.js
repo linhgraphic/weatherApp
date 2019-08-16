@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import "./components/input/input.css";
 import Input from "./components/input";
 import { API_KEY } from "./constants";
 import Form from "./components/form";
@@ -102,6 +103,7 @@ class App extends Component {
             />
             <br />
             <Input
+              className="ip"
               label="Current Weather"
               id="currentWeather"
               type="checkbox"
