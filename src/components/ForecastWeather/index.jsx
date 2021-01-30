@@ -1,19 +1,22 @@
 import React from "react";
+import DailyWeather from "../DailyWeather";
 import WeatherCard from "../WeatherCard";
 import "./ForecastWeather.css";
 
-const ForecastWeather = props => {
+const ForecastWeather = (props) => {
   return (
     <>
-      <h1>The weather in {props.city} is: </h1>
+      <h1>
+        The temperature in {props.city} next 40 hours (per 3 hours in 5 days)
+        is:{" "}
+      </h1>
       <div className="forecast-weather">
-        {props.data.list.map(forecast => (
-          //<div>{forecast.main.pressure}</div>
-          <WeatherCard weather={forecast} />
+        {props.data.list.map((forecast) => (
+          <WeatherCard weather={forecast} units={props.units} />
         ))}
-        {/* <p>{`Temperature: ${props.data.temp}`}.</p>
-      <p>{`Humidity: ${props.data.main.humidity}`}</p>
-      <p>{`Cloud: ${props.data.clouds.all}`}</p> */}
+
+        {/* <DailyWeather data={props.data.list} /> */}
+        {/* <DailyWeather /> */}
       </div>
     </>
   );

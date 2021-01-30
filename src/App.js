@@ -16,76 +16,68 @@ class App extends Component {
     city: "",
     currentWeather: true,
     forecastWeather: true,
-    units: "metric"
+    units: "metric",
   };
-  onChange = event => {
+  onChange = (event) => {
     this.setState({
       [event.target.name || event.target.id]: event.target.value,
-      error: null
+      error: null,
     });
   };
-  onChangeCheckbox = event => {
+  onChangeCheckbox = (event) => {
     this.setState({
       [event.target.name || event.target.id]: !this.state[
         event.target.name || event.target.id
-      ]
+      ],
     });
   };
-  onSubmit = event => {
+  onSubmit = (event) => {
     event.preventDefault();
     this.setState({ loading: true, forecastData: null, weatherData: null });
     if (this.state.currentWeather)
       fetch(
         //to use the same protocol of where the app is run. in this case http to https
-        `${
-          window.location.protocol
-        }//api.openweathermap.org/data/2.5/weather?q=${
-          this.state.city
-        }&appid=${API_KEY}&units=${this.state.units}`
+        `${window.location.protocol}//api.openweathermap.org/data/2.5/weather?q=${this.state.city}&appid=${API_KEY}&units=${this.state.units}`
       )
-        .then(res => {
+        .then((res) => {
           if (!res.ok) {
-            res.json().then(json => {
+            res.json().then((json) => {
               throw json;
             });
           }
           return res.json();
         })
-        .then(json => {
+        .then((json) => {
           this.setState({
             weatherData: json,
             loading: false,
             currentUnits: this.state.units,
-            currentCity: this.state.city
+            currentCity: this.state.city,
           });
         })
-        .catch(error => this.setState({ error, loading: false }));
+        .catch((error) => this.setState({ error, loading: false }));
 
     if (this.state.forecastWeather)
       fetch(
-        `${
-          window.location.protocol
-        }//api.openweathermap.org/data/2.5/forecast?q=${
-          this.state.city
-        }&appid=${API_KEY}&units=${this.state.units}`
+        `${window.location.protocol}//api.openweathermap.org/data/2.5/forecast?q=${this.state.city}&appid=${API_KEY}&units=${this.state.units}`
       )
-        .then(res => {
+        .then((res) => {
           if (!res.ok) {
-            res.json().then(json => {
+            res.json().then((json) => {
               throw json;
             });
           }
           return res.json();
         })
-        .then(json => {
+        .then((json) => {
           this.setState({
             forecastData: json,
             loading: false,
             currentUnits: this.state.units,
-            currentCity: this.state.city
+            currentCity: this.state.city,
           });
         })
-        .catch(error => this.setState({ error, loading: false }));
+        .catch((error) => this.setState({ error, loading: false }));
   };
 
   render() {
@@ -154,15 +146,16 @@ class App extends Component {
           </Form>
           {this.state.weatherData && (
             <CurrentWeather
+              city={this.state.currentCity}
               data={this.state.weatherData}
               units={this.state.currentUnits}
-              city={this.state.currentCity}
             />
           )}
           {this.state.forecastData && (
             <ForecastWeather
               data={this.state.forecastData}
               city={this.state.currentCity}
+              units={this.state.currentUnits}
             />
           )}
           {this.state.error && (
