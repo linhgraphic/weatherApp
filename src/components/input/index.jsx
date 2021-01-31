@@ -1,8 +1,8 @@
 import React from "react";
 import "./input.css";
 
-const Input = props => (
-  <>
+const Input = (props) => (
+  <div className="ip">
     {props.label && <label htmlFor={props.id}>{props.label}</label>}
     <input
       checked={props.checked}
@@ -17,6 +17,6 @@ const Input = props => (
       name={props.name}
       {...props}
     />
-  </>
+  </div>
 );
 export default Input;

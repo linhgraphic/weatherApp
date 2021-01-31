@@ -5,9 +5,9 @@ import WeatherIcon from "../WeatherIcon";
 const WeatherCard = (props) => {
   return (
     <div className="weather-card">
-      <WeatherIcon image={props.weather.weather[0]} />
+      <WeatherIcon image={props.data.weather[0]} />
       <div>
-        {props.weather.main.temp}
+        {props.data.main.temp}
         {props.units === "metric" ? "°C" : "F"}
       </div>
     </div>

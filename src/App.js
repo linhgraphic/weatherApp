@@ -95,7 +95,6 @@ class App extends Component {
             />
             <br />
             <Input
-              className="ip"
               label="Current Weather"
               id="currentWeather"
               type="checkbox"
@@ -135,6 +134,7 @@ class App extends Component {
 
             <br />
             <Input
+              className="submit"
               disabled={
                 !(this.state.currentWeather || this.state.forecastWeather) ||
                 this.state.loading ||

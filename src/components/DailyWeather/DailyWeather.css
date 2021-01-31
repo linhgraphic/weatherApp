@@ -1,0 +1,6 @@
+.daily-weather {
+  max-width: 90vw;
+  margin: 3vmin;
+  display: flex;
+  justify-content: space-evenly;
+}

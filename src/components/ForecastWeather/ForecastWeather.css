@@ -1,4 +1,8 @@
 .forecast-weather {
+  max-width: 95vw;
+}
+
+.forecast-weather .temperature {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
